@@ -1,20 +1,38 @@
 import Link from "next/link";
 import RemoveBtn from "@/components/RemoveBtn"
 import {HiPencilAlt} from 'react-icons/hi'
-export default function topicsList() {
+
+const getTopics=async()=>{
+    try{
+        const res= await fetch('http://localhost:3000/api/topics',{cache:"no-store"});
+    
+    if(!res.ok){
+        throw new Error("failed to fetch")
+    }
+    return res.json();
+}
+    catch(error){
+        console.log(error)
+    }
+}
+export default async function topicsList() {
+    const {topics} = await getTopics();
     return (
-       
-        <div className="p-4 border border-slate-300 my-3 flex justify-between gap-5">
+       <>
+       {topics.map((item)=>(
+        <div key ={item.id} className="p-4 border border-slate-300 my-3 flex justify-between gap-5">
             <div>
-            <h2 className="font-bold">Topic title</h2>
-        <div>description</div>
+            <h2 className="font-bold">{item.title}</h2>
+        <div>{item.description}</div>
         </div>
         <div>
            <RemoveBtn /> 
-           <Link href={"edit/123"}>
+           <Link href={`/editTopic/${item._id}`}>
            <HiPencilAlt size={24}/>
            </Link>
            </div>
         </div>
+        ))}
+        </>
     );
 }

@@ -1,11 +1,20 @@
 import EditTopicForm from "@/components/EditTopicForm";
 
-export default function EditTopic() {
-    return (
-        <form className="flex flex-col gap-3">
-           <input className="border border-slate-500 px-8 py-2" type="text" placeholder="title"/>
-           <input className="border border-slate-500 px-8 py-2" type="text" placeholder="description"/>
-           <button>Update Topic</button>
-        </form>
-    );
+const getTopicByID = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("failed to fetch data");
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export default async function EditTopic({ params }) {
+  const { id } = await params;
+  const { topic } = await getTopicByID(id);
+  const { title, description } = topic;
+  return <EditTopicForm id={id} title={title} description={description} />;
 }

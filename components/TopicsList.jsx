@@ -20,13 +20,13 @@ export default async function topicsList() {
     return (
        <>
        {topics.map((item)=>(
-        <div key ={item.id} className="p-4 border border-slate-300 my-3 flex justify-between gap-5">
+        <div key ={item._id} className="p-4 border border-slate-300 my-3 flex justify-between gap-5">
             <div>
             <h2 className="font-bold">{item.title}</h2>
         <div>{item.description}</div>
         </div>
         <div>
-           <RemoveBtn /> 
+           <RemoveBtn id={item._id}/> 
            <Link href={`/editTopic/${item._id}`}>
            <HiPencilAlt size={24}/>
            </Link>
